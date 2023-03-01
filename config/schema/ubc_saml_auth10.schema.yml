@@ -1,0 +1,10 @@
+ubc_saml_auth10.settings:
+  type: config_object
+  label: 'UBC Saml Auth settings'
+  mapping:
+    policy_library:
+      type: mapping
+      mapping:
+        ubc_saml_auth10_settings:
+          type: text
+          label: 'UBC Saml Auth settings'

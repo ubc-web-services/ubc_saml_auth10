@@ -1,0 +1,13 @@
+{% set hascwlrole = cwl_role %}
+{% if hascwlrole is not empty %}
+<div aria-label="status-message" role="status" aria-live="polite" class="bg-ubc-blue-polar">
+  <div class="container py-2 mx-auto text-sm text-right message__content">
+    <p class="text-hug">Logged in as {{ cwl_name }} <span class="inline-block px-4">|</span> <button class="unit-button unit-button--simple"><a href="https://hr.ubc.ca/user/logout">Logout</a>
+      <svg role="presentation" class="inline-block w-4 h-4 ml-2 pointer-events-none">
+        <use xlink:href="#icon-locked"></use>
+      </svg>
+    </button>
+    </p>
+  </div>
+</div>
+{% endif %}

@@ -1,0 +1,5 @@
+ubc_saml_auth10.form:
+  title: 'UBC Saml Auth settings'
+  description: 'Set CWL Protected Paths'
+  route_name: ubc_saml_auth10.form
+  parent: user.admin_index

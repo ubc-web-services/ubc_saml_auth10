@@ -1,0 +1,110 @@
+<?php
+
+define('UBC_SAML_AUTH_CONFIG_FIELD_NUM', 20);
+
+use Drupal\Core\Routing\TrustedRedirectResponse;
+use Drupal\Core\Access\AccessResult;
+
+/**
+ * Implements hook_theme().
+ */
+function ubc_saml_auth10_theme($existing, $type, $theme, $path) {
+
+  return [
+    'cwl_template' => [
+      'variables' => ['cwl_role' => NULL, 'cwl_name' => NULL],
+      'template' => 'block--cwl-template',
+    ],
+  ];
+}
+
+function ubc_saml_auth10_getCWLWhitelist() {
+
+  //Default protected pages
+  $protected_list = ['/cwl', '/secure'];
+
+  //Get paths protected via admin interface
+  $config = \Drupal::config('ubc_saml_auth10.settings');
+  for($i=1; $i<=UBC_SAML_AUTH_CONFIG_FIELD_NUM; $i++) {
+
+    $next = $config->get('ubc_saml_auth10.ubc_saml_auth10_settings_ind'.$i);
+    if(empty($next)) {
+      break;
+    }
+    $protected_list[] = $config->get('ubc_saml_auth10.ubc_saml_auth10_settings_ind'.$i);
+  }
+
+  return $protected_list;
+}
+
+function ubc_saml_auth10_pathIsInWildcardWhitelist($path) {
+
+  //Default protected paths
+  $protected_list = ['/cwl/*', '/secure/*'];
+
+  //Get paths protected via admin interface
+  $config = \Drupal::config('ubc_saml_auth10.settings');
+  for($i=1; $i<=UBC_SAML_AUTH_CONFIG_FIELD_NUM; $i++) {
+
+    $next = $config->get('ubc_saml_auth10.ubc_saml_auth10_settings'.$i);
+    if(empty($next)) {
+      break;
+    }
+    $protected_list[] = $config->get('ubc_saml_auth10.ubc_saml_auth10_settings'.$i);
+  }
+
+  foreach($protected_list as $expression) {
+
+    $length = strlen($expression) - strlen('/*');
+    $path_match = substr($path, 0, $length);
+
+    if ($path == substr($expression, 0, -2)) {
+      return false;
+    }
+    elseif ($path_match == substr($expression, 0, -2)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function ubc_saml_auth10_node_access($node, $op, $account) {
+
+	if(is_object($node) === FALSE) {
+    return;
+  }
+
+  //Get alias of current path
+	$current_path = \Drupal::service('path.current')->getPath();
+	$path = \Drupal::service('path_alias.manager')->getAliasByPath($current_path);
+
+	//Load Whitelist
+	$protected_list = ubc_saml_auth10_getCWLWhitelist();
+
+	$hasPermission = $account->hasPermission('access cwl protected content');
+	if($hasPermission == FALSE) {
+
+		$UBC_PSH_BRANCH = getenv('PLATFORM_BRANCH');
+
+    global $base_url;
+    $rtn_url = $base_url.$path;
+
+		if ((in_array($path, $protected_list)) || (ubc_saml_auth10_pathIsInWildcardWhitelist($path))) {
+
+      $loggedIn = $account->isAuthenticated();
+      if($loggedIn) {
+				\Drupal::logger('UBC_SAML_AUTH')->notice('User is logged in but does not have permission: line 56');
+        return AccessResult::forbidden()->cachePerPermissions();
+      }
+
+      if($UBC_PSH_BRANCH == 'master') {
+				header('Location: '.$base_url.'/saml_login?ReturnTo='.$rtn_url);
+				die();
+      }
+      else {
+        \Drupal::logger('UBC_SAML_AUTH')->notice('Whitelist Path: '.$rtn_url);
+			}
+    }
+	}
+
+}
