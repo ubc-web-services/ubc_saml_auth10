@@ -1,0 +1,8 @@
+{
+  "name": "ubc-web-services/ubc_saml_auth10",
+  "description": "UBC SAML Auth configuration for protected paths",
+  "type": "drupal-module",
+  "require": {
+    "drupal/simplesamlphp_auth": "^3.3"
+  }
+}
