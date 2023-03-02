@@ -1,0 +1,6 @@
+# ubc_saml_auth10.libraries.yml
+
+ubc_saml_auth10:
+  css:
+    theme:
+      css/ubc_saml_auth10.css: { }
