@@ -3,6 +3,6 @@
   "description": "UBC SAML Auth configuration for protected paths",
   "type": "drupal-module",
   "require": {
-    "drupal/simplesamlphp_auth": "^3.3"
+    "drupal/simplesamlphp_auth": ">=3.3"
   }
 }
