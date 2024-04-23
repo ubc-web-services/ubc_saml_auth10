@@ -12,3 +12,5 @@ This module can be used in conjunction with other modules to provide protections
 5.  Navigate to the "Anonymous Behaviour" Tab and change the redirect path to `/saml_login` and hit Save.
 
 This should ensure that private files are not accessible by unauthenticated users, if a private file is accessed via a direct link this will be blocked by the private file download permission module which will cause a 403, the 4032login module will cause this 403 to redirect to a CWL login. Upon successful CWL login the user will be redirected back to the original file they were attempting to access. Upon unsuccessful login the access will be denied. This provides extra protection for private files and allows for the protection of private files as a media type rather than needing to attach them to a node and protect that node.
+
+For reference see https://isc.ubc.ca/admin/config/system/r4032login/settings
