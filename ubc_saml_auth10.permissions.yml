@@ -1,2 +1,7 @@
 'access cwl protected content':
   title: 'Access CWL Protected Content'
+
+'administer ubc saml auth settings':
+  title: Adminster UBC SAML Auth Settings
+  description: Enter paths to be protected by SAML Auth
+  restrict access: TRUE

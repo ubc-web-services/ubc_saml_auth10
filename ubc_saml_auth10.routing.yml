@@ -4,4 +4,4 @@ ubc_saml_auth10.form:
     _form: '\Drupal\ubc_saml_auth10\Form\UbcSamlAuth10Form'
     _title: 'UBC Saml Auth settings'
   requirements:
-    _permission: 'administer site configuration'
+    _permission: 'administer ubc saml auth settings'
